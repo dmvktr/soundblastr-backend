@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootApplication
 public class SoundblastrBackendApplication {
@@ -46,7 +47,6 @@ public class SoundblastrBackendApplication {
                     .name("Killers")
                     .genre(Genre.INDIE)
                     .build();
-
             bandRepository.save(muse);
             bandRepository.save(killers);
 
@@ -56,21 +56,23 @@ public class SoundblastrBackendApplication {
 
             venueRepository.save(budapestPark);
 
-            Band museFromMemory = bandRepository.findById(100L).get();
-            Venue budapestParkFromMemory = venueRepository.findById(1000L).get();
+            Band museFromDatabase = bandRepository.findById(100L).get();
+            Venue budapestParkFromDatabase = venueRepository.findById(1000L).get();
 
             Event museConcert = Event.builder()
                     .title("Muse Concert")
                     .date(LocalDate.of(2021, 9, 22))
-                    .band(museFromMemory)
-                    .venue(budapestParkFromMemory).build();
+                    .band(museFromDatabase)
+                    .venue(budapestParkFromDatabase).build();
 
             eventRepository.saveAndFlush(museConcert);
             Event museConcertFromDatabase = eventRepository.findById(1L).get();
 
-//            budapestParkFromMemory.addEvent(museConcertFromDatabase);
-//            museFromMemory.addEvent(museConcertFromDatabase);
-
+            budapestParkFromDatabase.addEvent(museConcertFromDatabase);
+            museFromDatabase.addEvent(museConcertFromDatabase);
+            bandRepository.save(museFromDatabase);
+            eventRepository.deleteById(1L);
+            List<Band> bands = bandRepository.findAll();
         };
     }
 

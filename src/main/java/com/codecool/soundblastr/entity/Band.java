@@ -47,14 +47,15 @@ public class Band {
     private Set<Genre> genres;
 
     @Singular
-    @OneToMany(mappedBy = "band", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Event> events;
+    @OneToMany(mappedBy = "band",fetch = FetchType.EAGER)
+    List<Event> events = new ArrayList<>();
 
     public void addEvent(Event event) {
         if (events == null) {
             events = new ArrayList<>();
         }
-        events.add(event);
+        this.events.add(event);
+        if(event.getBand() != this)     event.setBand(this);
     }
 
 

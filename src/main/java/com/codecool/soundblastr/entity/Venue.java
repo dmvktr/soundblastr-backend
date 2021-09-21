@@ -44,14 +44,15 @@ public class Venue {
     private int numberOfSeats;
 
     @Singular
-    @OneToMany(mappedBy = "venue", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    List<Event> events;
+    @OneToMany(mappedBy = "venue", fetch = FetchType.EAGER)
+    List<Event> events = new ArrayList<>();
 
     public void addEvent(Event event) {
         if (events == null) {
             events = new ArrayList<>();
         }
         events.add(event);
+        if(event.getVenue() != this) event.setVenue(this);
     }
 
 }

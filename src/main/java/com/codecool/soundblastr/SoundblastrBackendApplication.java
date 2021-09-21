@@ -57,6 +57,7 @@ public class SoundblastrBackendApplication {
             venueRepository.save(budapestPark);
 
             Band museFromDatabase = bandRepository.findById(100L).get();
+            Band killersFromDatabase = bandRepository.findById(101L).get();
             Venue budapestParkFromDatabase = venueRepository.findById(1000L).get();
 
             Event museConcert = Event.builder()
@@ -65,13 +66,23 @@ public class SoundblastrBackendApplication {
                     .band(museFromDatabase)
                     .venue(budapestParkFromDatabase).build();
 
-            eventRepository.saveAndFlush(museConcert);
+            Event killersConcert = Event.builder()
+                    .title("Killers Concert")
+                    .date(LocalDate.of(2021, 9, 22))
+                    .band(killers)
+                    .venue(budapestParkFromDatabase).build();
+
+            eventRepository.save(museConcert);
+            eventRepository.saveAndFlush(killersConcert);
             Event museConcertFromDatabase = eventRepository.findById(1L).get();
+            Event killersConcertFromDatabase = eventRepository.findById(2L).get();
 
             budapestParkFromDatabase.addEvent(museConcertFromDatabase);
             museFromDatabase.addEvent(museConcertFromDatabase);
+            budapestParkFromDatabase.addEvent(killersConcertFromDatabase);
+            killersFromDatabase.addEvent(killersConcertFromDatabase);
             bandRepository.save(museFromDatabase);
-            eventRepository.deleteById(1L);
+            bandRepository.save(killersFromDatabase);
             List<Band> bands = bandRepository.findAll();
         };
     }

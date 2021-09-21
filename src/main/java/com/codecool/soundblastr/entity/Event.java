@@ -44,7 +44,6 @@ public class Event {
 
     @Column(
             name="date",
-            unique = true,
             nullable = false
     )
     private LocalDate date;

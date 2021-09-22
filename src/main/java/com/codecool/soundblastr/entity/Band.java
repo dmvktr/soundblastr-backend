@@ -1,5 +1,6 @@
 package com.codecool.soundblastr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class Band {
 
@@ -45,18 +47,5 @@ public class Band {
     @Singular
     @Enumerated(EnumType.STRING)
     private Set<Genre> genres;
-
-    @Singular
-    @OneToMany(mappedBy = "band",fetch = FetchType.EAGER)
-    List<Event> events = new ArrayList<>();
-
-    public void addEvent(Event event) {
-        if (events == null) {
-            events = new ArrayList<>();
-        }
-        this.events.add(event);
-        if(event.getBand() != this)     event.setBand(this);
-    }
-
 
 }

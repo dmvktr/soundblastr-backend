@@ -1,6 +1,7 @@
 package com.codecool.soundblastr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @ToString
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Venue {
 
     @Id

@@ -2,6 +2,7 @@ package com.codecool.soundblastr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -49,6 +50,7 @@ public class Band {
     @Enumerated(EnumType.STRING)
     private Set<Genre> genres;
 
+    @JsonIgnore
     @Singular
     @OneToMany(mappedBy = "band",fetch = FetchType.EAGER)
     List<Event> events = new ArrayList<>();

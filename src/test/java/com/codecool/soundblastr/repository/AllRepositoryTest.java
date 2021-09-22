@@ -50,18 +50,18 @@ class AllRepositoryTest {
         });
     }
 
-    @Test
-    public void eventRepositoryDelete_eventReferenceIsDeletedFromBandCollection_whenEventIsDeleted(){
-        Event event = Event.builder().title("test concert").date(LocalDate.of(2021,12,12)).build();
-        Band band = Band.builder().name("test").build();
-        bandRepository.save(band);
-        Band bandFromDb = bandRepository.findAll().get(0);
-        event.setBand(bandFromDb);
-        eventRepository.save(event);
-        eventRepository.delete(event);
-        int expected = 0;
-        List<Band> bandss = bandRepository.findAll();
-        assertEquals(expected, bandss.get(0).getEvents().size());
-    }
+//    @Test
+//    public void eventRepositoryDelete_eventReferenceIsDeletedFromBandCollection_whenEventIsDeleted(){
+//        Event event = Event.builder().title("test concert").date(LocalDate.of(2021,12,12)).build();
+//        Band band = Band.builder().name("test").build();
+//        bandRepository.save(band);
+//        Band bandFromDb = bandRepository.findAll().get(0);
+//        event.setBand(bandFromDb);
+//        eventRepository.save(event);
+//        eventRepository.delete(event);
+//        int expected = 0;
+//        List<Band> bandss = bandRepository.findAll();
+//        assertEquals(expected, bandss.get(0).getEvents().size());
+//    }
 
 }

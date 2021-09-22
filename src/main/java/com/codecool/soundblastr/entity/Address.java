@@ -1,5 +1,7 @@
 package com.codecool.soundblastr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class Address {
     @Id
     @SequenceGenerator(

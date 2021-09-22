@@ -50,10 +50,11 @@ public class VenueController {
         venueRepository.deleteById(Long.parseLong(venueId));
     }
 
-    @GetMapping("/events/id={venueId}")
-    public List<Event> getEventsForVenue(@PathVariable("venueId") String venueId) {
-        return eventRepository.findEventsByVenueId(Long.parseLong(venueId));
-    }
+    // TODO - move this to EventController
+//    @GetMapping("/events/id={venueId}")
+//    public List<Event> getEventsForVenue(@PathVariable("venueId") String venueId) {
+//        return eventRepository.findEventsByVenueId(Long.parseLong(venueId));
+//    }
 
     @PutMapping("/id={venueId}")
     @ResponseBody

@@ -1,5 +1,6 @@
 package com.codecool.soundblastr.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 public class Venue {
 
@@ -41,21 +43,10 @@ public class Venue {
     )
     private String name;
 
+    @Column(name="number_of_seats")
     private int numberOfSeats;
-
-    @Singular
-    @OneToMany(mappedBy = "venue", fetch = FetchType.EAGER)
-    List<Event> events = new ArrayList<>();
 
     @OneToOne(mappedBy = "venue", cascade = CascadeType.ALL)
     private Address address;
-
-    public void addEvent(Event event) {
-        if (events == null) {
-            events = new ArrayList<>();
-        }
-        events.add(event);
-        if(event.getVenue() != this) event.setVenue(this);
-    }
 
 }

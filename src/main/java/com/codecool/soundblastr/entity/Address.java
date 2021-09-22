@@ -49,6 +49,6 @@ public class Address {
     )
     private int zipcode;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne
     private Venue venue;
 }

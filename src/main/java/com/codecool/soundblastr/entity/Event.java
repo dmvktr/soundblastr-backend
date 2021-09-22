@@ -1,6 +1,8 @@
 package com.codecool.soundblastr.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
@@ -17,6 +19,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @ToString
 @Builder
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class Event {
 
     @Id

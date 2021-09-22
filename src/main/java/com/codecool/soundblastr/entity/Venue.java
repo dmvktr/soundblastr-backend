@@ -47,6 +47,9 @@ public class Venue {
     @OneToMany(mappedBy = "venue", fetch = FetchType.EAGER)
     List<Event> events = new ArrayList<>();
 
+    @OneToOne(mappedBy = "venue", cascade = CascadeType.ALL)
+    private Address address;
+
     public void addEvent(Event event) {
         if (events == null) {
             events = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.codecool.soundblastr.entity;
 
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,9 +51,11 @@ public class Event {
 
     private int price;
 
+    @JsonIgnore
     @ManyToOne
     private Band band;
 
+    @JsonIgnore
     @ManyToOne
     private Venue venue;
 

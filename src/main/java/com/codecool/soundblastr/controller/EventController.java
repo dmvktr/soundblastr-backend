@@ -39,10 +39,7 @@ public class EventController {
                 .band(band)
                 .venue(venue)
                 .build();
-        eventRepository.saveAndFlush(newEvent);
-        Event newEventDB = eventRepository.findById(3L).orElse(null);
-        System.out.println("Roky!: " + newEventDB);
-        return newEventDB;
+        return eventRepository.save(newEvent);
     }
 
     @GetMapping("/all")

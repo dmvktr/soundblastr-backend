@@ -1,8 +1,6 @@
 package com.codecool.soundblastr.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,8 +15,9 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Band {
 
     @Id
@@ -49,19 +48,5 @@ public class Band {
     @Singular
     @Enumerated(EnumType.STRING)
     private Set<Genre> genres;
-
-    @JsonIgnore
-    @Singular
-    @OneToMany(mappedBy = "band",fetch = FetchType.EAGER)
-    List<Event> events = new ArrayList<>();
-
-    public void addEvent(Event event) {
-        if (events == null) {
-            events = new ArrayList<>();
-        }
-        this.events.add(event);
-        if(event.getBand() != this)     event.setBand(this);
-    }
-
 
 }

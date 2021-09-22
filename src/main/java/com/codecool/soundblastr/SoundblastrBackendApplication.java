@@ -77,10 +77,10 @@ public class SoundblastrBackendApplication {
             Event museConcertFromDatabase = eventRepository.findById(1L).get();
             Event killersConcertFromDatabase = eventRepository.findById(2L).get();
 
-            budapestParkFromDatabase.addEvent(museConcertFromDatabase);
-            museFromDatabase.addEvent(museConcertFromDatabase);
-            budapestParkFromDatabase.addEvent(killersConcertFromDatabase);
-            killersFromDatabase.addEvent(killersConcertFromDatabase);
+//            budapestParkFromDatabase.addEvent(museConcertFromDatabase);
+//            museFromDatabase.addEvent(museConcertFromDatabase);
+//            budapestParkFromDatabase.addEvent(killersConcertFromDatabase);
+//            killersFromDatabase.addEvent(killersConcertFromDatabase);
             bandRepository.save(museFromDatabase);
             bandRepository.save(killersFromDatabase);
             List<Band> bands = bandRepository.findAll();

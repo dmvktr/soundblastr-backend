@@ -48,10 +48,11 @@ public class BandController {
         bandRepository.deleteById(Long.parseLong(bandId));
     }
 
-    @GetMapping("/events/id={bandId}")
-    public List<Event> getEventsForBand(@PathVariable("bandId") String bandId) {
-        return eventRepository.findEventsByBandId(Long.parseLong(bandId));
-    }
+    // TODO - move this to EventController
+//    @GetMapping("/events/id={bandId}")
+//    public List<Event> getEventsForBand(@PathVariable("bandId") String bandId) {
+//        return eventRepository.findEventsByBandId(Long.parseLong(bandId));
+//    }
 
     @PutMapping("/id={bandId}")
     @ResponseBody

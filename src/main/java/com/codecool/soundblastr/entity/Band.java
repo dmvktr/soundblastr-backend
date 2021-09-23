@@ -47,6 +47,9 @@ public class Band {
     )
     private String name;
 
+    @Column(name="description")
+    private String description;
+
     @ElementCollection
     @Singular
     @Enumerated(EnumType.STRING)

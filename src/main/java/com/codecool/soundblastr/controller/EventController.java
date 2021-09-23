@@ -5,8 +5,11 @@ import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +28,23 @@ public class EventController {
         this.venueRepository = venueRepository;
     }
 
-    @PostMapping("")
-    public Event addEvent(@RequestBody EventRequest eventRequest) {
-        Band band = bandRepository.getById(eventRequest.getBandId());
-        Venue venue = venueRepository.getById(eventRequest.getVenueId());
+    @PostMapping("/new")
+    public Object addEvent(@RequestBody EventRequest eventRequest) {
+        Band band;
+        Venue venue;
+        try {
+            band = bandRepository.getById(eventRequest.getBandId());
+            venue = venueRepository.getById(eventRequest.getVenueId());
+        } catch (EntityNotFoundException e) {
+            return new JsonMessage(Status.NO_ACTION, "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found, nothing happened.");
+        }
+
         Event newEvent = Event.builder()
                 .title(eventRequest.getTitle())
                 .imageUrl(eventRequest.getImageUrl())
                 .date(eventRequest.getDate())
                 .ticketPrice(eventRequest.getTicketPrice())
+                .description(eventRequest.getDescription())
                 .band(band)
                 .venue(venue)
                 .build();
@@ -61,14 +72,28 @@ public class EventController {
     }
 
     @PutMapping("/{eventId}")
-    public Event updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
-        Band band = bandRepository.getById(eventRequest.getBandId());
-        Venue venue = venueRepository.getById(eventRequest.getVenueId());
-        Event eventToUpdate = eventRepository.getById(eventId);
+    public Object updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
+        Band band;
+        Venue venue;
+        Event eventToUpdate;
+
+        eventToUpdate = eventRepository.findById(eventId).orElse(null);
+        if (eventToUpdate == null) {
+            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened.");
+        }
+
+        try {
+            band = bandRepository.getById(eventRequest.getBandId());
+            venue = venueRepository.getById(eventRequest.getVenueId());
+        } catch (EntityNotFoundException e) {
+            return new JsonMessage(Status.NO_ACTION, "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found, nothing happened.");
+        }
+
         eventToUpdate.setTitle(eventRequest.getTitle());
         eventToUpdate.setImageUrl(eventRequest.getImageUrl());
         eventToUpdate.setDate(eventRequest.getDate());
         eventToUpdate.setTicketPrice(eventRequest.getTicketPrice());
+        eventToUpdate.setDescription(eventRequest.getDescription());
         eventToUpdate.setBand(band);
         eventToUpdate.setVenue(venue);
         return eventRepository.save(eventToUpdate);
@@ -76,8 +101,12 @@ public class EventController {
 
     @DeleteMapping("/{eventId}")
     public JsonMessage deleteEvent(@PathVariable Long eventId) {
-        eventRepository.deleteById(eventId);
-        return new JsonMessage(Status.OK, "Successfully deleted event #" +  eventId + ".");
+        try {
+            eventRepository.deleteById(eventId);
+            return new JsonMessage(Status.OK, "Successfully deleted event #" + eventId + ".");
+        } catch (EmptyResultDataAccessException e) {
+            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened");
+        }
     }
 
 }

@@ -64,7 +64,7 @@ class EventControllerTest {
             .band(Band.builder().id(100L).name("Muse").build())
             .build();
         Mockito.when(mockEventRepository.save(any())).thenReturn(event);
-        mockMvc.perform(MockMvcRequestBuilders.post("/event")
+        mockMvc.perform(MockMvcRequestBuilders.post("/event/new")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content("{\"title\": \"Killers new Concert from Postman 3\", \"date\": \"2031-01-01\", \"price\": 400, " +

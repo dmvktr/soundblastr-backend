@@ -41,49 +41,47 @@ public class SoundblastrBackendApplication {
                     .name("Muse")
                     .genre(Genre.INDIE)
                     .genre(Genre.POP)
+                    .imageUrl("https://cdn.freelogovectors.net/wp-content/uploads/2019/10/muse-logo.png")
                     .build();
+
+            bandRepository.save(muse);
 
             Band killers = Band.builder()
                     .name("Killers")
                     .genre(Genre.INDIE)
+                    .imageUrl("https://logoeps.com/wp-content/uploads/2013/06/the-killers-vector-logo.png")
                     .build();
-            bandRepository.save(muse);
+
             bandRepository.save(killers);
 
             Venue budapestPark = Venue.builder()
                     .name("Budapest Park")
+                    .imageUrl("https://9.kerulet.ittlakunk.hu/files/ittlakunk/styles/large/public/upload/company/1256/budapest_park_logo.png?itok=6iDPG-pX")
                     .build();
 
             venueRepository.save(budapestPark);
 
-            Band museFromDatabase = bandRepository.findById(100L).get();
-            Band killersFromDatabase = bandRepository.findById(101L).get();
-            Venue budapestParkFromDatabase = venueRepository.findById(1000L).get();
+            Band museDB = bandRepository.findById(100L).get();
+            Band killersDB = bandRepository.findById(101L).get();
+            Venue budapestParkDB = venueRepository.findById(1000L).get();
 
             Event museConcert = Event.builder()
                     .title("Muse Concert")
                     .date(LocalDate.of(2021, 9, 22))
-                    .band(museFromDatabase)
-                    .venue(budapestParkFromDatabase).build();
+                    .band(museDB)
+                    .imageUrl("https://seeklogo.com/images/M/muse-knights-of-cydonia-logo-9172377960-seeklogo.com.png")
+                    .venue(budapestParkDB).build();
 
             Event killersConcert = Event.builder()
                     .title("Killers Concert")
                     .date(LocalDate.of(2021, 9, 22))
-                    .band(killers)
-                    .venue(budapestParkFromDatabase).build();
+                    .band(killersDB)
+                    .imageUrl("https://upload.wikimedia.org/wikipedia/en/thumb/1/17/The_Killers_-_Hot_Fuss.png/220px-The_Killers_-_Hot_Fuss.png")
+                    .venue(budapestParkDB).build();
 
             eventRepository.save(museConcert);
-            eventRepository.saveAndFlush(killersConcert);
-            Event museConcertFromDatabase = eventRepository.findById(1L).get();
-            Event killersConcertFromDatabase = eventRepository.findById(2L).get();
+            eventRepository.save(killersConcert);
 
-//            budapestParkFromDatabase.addEvent(museConcertFromDatabase);
-//            museFromDatabase.addEvent(museConcertFromDatabase);
-//            budapestParkFromDatabase.addEvent(killersConcertFromDatabase);
-//            killersFromDatabase.addEvent(killersConcertFromDatabase);
-            bandRepository.save(museFromDatabase);
-            bandRepository.save(killersFromDatabase);
-            List<Band> bands = bandRepository.findAll();
         };
     }
 

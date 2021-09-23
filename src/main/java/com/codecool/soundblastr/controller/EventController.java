@@ -5,7 +5,6 @@ import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,6 +70,16 @@ public class EventController {
         return eventRepository.findEventsByVenueId(venueId);
     }
 
+    @DeleteMapping("/{eventId}")
+    public JsonMessage deleteEvent(@PathVariable Long eventId) {
+        try {
+            eventRepository.deleteById(eventId);
+            return new JsonMessage(Status.OK, "Successfully deleted event #" + eventId + ".");
+        } catch (EmptyResultDataAccessException e) {
+            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened");
+        }
+    }
+
     @PutMapping("/{eventId}")
     public Object updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
         Band band;
@@ -97,16 +106,6 @@ public class EventController {
         eventToUpdate.setBand(band);
         eventToUpdate.setVenue(venue);
         return eventRepository.save(eventToUpdate);
-    }
-
-    @DeleteMapping("/{eventId}")
-    public JsonMessage deleteEvent(@PathVariable Long eventId) {
-        try {
-            eventRepository.deleteById(eventId);
-            return new JsonMessage(Status.OK, "Successfully deleted event #" + eventId + ".");
-        } catch (EmptyResultDataAccessException e) {
-            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened");
-        }
     }
 
 }

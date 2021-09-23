@@ -1,10 +1,8 @@
 package com.codecool.soundblastr.controller;
 
 import com.codecool.soundblastr.entity.Band;
-import com.codecool.soundblastr.entity.Event;
 import com.codecool.soundblastr.entity.Genre;
 import com.codecool.soundblastr.repository.BandRepository;
-import com.codecool.soundblastr.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +16,9 @@ public class BandController {
 
     private final BandRepository bandRepository;
 
-    private final EventRepository eventRepository;
-
     @Autowired
-    public BandController(BandRepository bandRepository, EventRepository eventRepository) {
+    public BandController(BandRepository bandRepository) {
         this.bandRepository = bandRepository;
-        this.eventRepository = eventRepository;
     }
 
     @PostMapping("/new")
@@ -33,7 +28,7 @@ public class BandController {
         return bandRepository.save(bandToAdd);
     }
 
-    @GetMapping("/id={bandId}")
+    @GetMapping("/{bandId}")
     public Band getBand(@PathVariable("bandId") String bandId) {
         return bandRepository.findById(Long.parseLong(bandId)).orElse(null);
     }
@@ -43,21 +38,15 @@ public class BandController {
         return bandRepository.findAll();
     }
 
-    @DeleteMapping("/id={bandId}")
+    @DeleteMapping("/{bandId}")
     public void deleteBand(@PathVariable("bandId") String bandId) {
         bandRepository.deleteById(Long.parseLong(bandId));
     }
 
-    // TODO - move this to EventController
-//    @GetMapping("/events/id={bandId}")
-//    public List<Event> getEventsForBand(@PathVariable("bandId") String bandId) {
-//        return eventRepository.findEventsByBandId(Long.parseLong(bandId));
-//    }
-
-    @PutMapping("/id={bandId}")
+    @PutMapping("/{bandId}")
     @ResponseBody
-    public Band updateBand(@PathVariable("bandId") String bandId, @RequestBody String name, Set<Genre> genres) {
-        Band bandToUpdate = bandRepository.getBandById(Long.parseLong(bandId));
+    public Band updateBand(@PathVariable Long bandId, @RequestBody String name, Set<Genre> genres) {
+        Band bandToUpdate = bandRepository.getById(bandId);
         bandToUpdate.setName(name);
         bandToUpdate.setGenres(genres);
         return bandRepository.save(bandToUpdate);

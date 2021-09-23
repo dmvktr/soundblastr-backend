@@ -1,8 +1,6 @@
 package com.codecool.soundblastr.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,45 +14,44 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Builder
 public class Address {
-    @JsonIgnore
     @Id
     @SequenceGenerator(
-        name = "address_sequence",
-        sequenceName = "address_sequence",
-        allocationSize = 1
+            name = "address_sequence",
+            sequenceName = "address_sequence",
+            allocationSize = 1
     )
     @GeneratedValue(
-        strategy = SEQUENCE,
-        generator = "address_sequence"
+            strategy = SEQUENCE,
+            generator = "address_sequence"
     )
     @Column(
-        name="id",
-        updatable = false
+            name="id",
+            updatable = false
     )
+    @JsonIgnore
     private Long id;
     @Column(
-        name="street",
-        nullable = false
+            name="street",
+            nullable = false
     )
     private String street;
     @Column(
-        name="houseNr",
-        nullable = false
+            name="houseNr",
+            nullable = false
     )
     private int houseNr;
     @Column(
-        name="city",
-        nullable = false
+            name="city",
+            nullable = false
     )
     private String city;
     @Column(
-        name="zipcode",
-        nullable = false
+            name="zipcode",
+            nullable = false
     )
     private int zipcode;
 
     @JsonIgnore
-    @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "address")
     private Venue venue;
 }

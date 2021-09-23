@@ -42,6 +42,7 @@ public class SoundblastrBackendApplication {
                     .genre(Genre.INDIE)
                     .genre(Genre.POP)
                     .imageUrl("https://cdn.freelogovectors.net/wp-content/uploads/2019/10/muse-logo.png")
+                    .description("Muse are an English rock band from Teignmouth, Devon, formed in 1994.")
                     .build();
 
             bandRepository.save(muse);
@@ -50,6 +51,7 @@ public class SoundblastrBackendApplication {
                     .name("Killers")
                     .genre(Genre.INDIE)
                     .imageUrl("https://logoeps.com/wp-content/uploads/2013/06/the-killers-vector-logo.png")
+                    .description("The Killers are an American rock band formed in Las Vegas in 2001 by Brandon Flowers.")
                     .build();
 
             bandRepository.save(killers);
@@ -57,6 +59,7 @@ public class SoundblastrBackendApplication {
             Venue budapestPark = Venue.builder()
                     .name("Budapest Park")
                     .imageUrl("https://9.kerulet.ittlakunk.hu/files/ittlakunk/styles/large/public/upload/company/1256/budapest_park_logo.png?itok=6iDPG-pX")
+                    .description("Budapest Park is Europe's Largest Outdoor Concert and Entertainment Venue")
                     .build();
 
             venueRepository.save(budapestPark);
@@ -70,6 +73,7 @@ public class SoundblastrBackendApplication {
                     .date(LocalDate.of(2021, 9, 22))
                     .band(museDB)
                     .imageUrl("https://seeklogo.com/images/M/muse-knights-of-cydonia-logo-9172377960-seeklogo.com.png")
+                    .description("Enjoy Muse at Budapest Park!")
                     .venue(budapestParkDB).build();
 
             Event killersConcert = Event.builder()
@@ -77,6 +81,7 @@ public class SoundblastrBackendApplication {
                     .date(LocalDate.of(2021, 9, 22))
                     .band(killersDB)
                     .imageUrl("https://upload.wikimedia.org/wikipedia/en/thumb/1/17/The_Killers_-_Hot_Fuss.png/220px-The_Killers_-_Hot_Fuss.png")
+                    .description("Enjoy Killers at Budapest Park!")
                     .venue(budapestParkDB).build();
 
             eventRepository.save(museConcert);

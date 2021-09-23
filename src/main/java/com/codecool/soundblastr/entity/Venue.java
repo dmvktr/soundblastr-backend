@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -25,7 +22,7 @@ public class Venue {
             name = "venue_sequence",
             sequenceName = "venue_sequence",
             allocationSize = 1,
-            initialValue = 1000
+            initialValue = 1001
     )
     @GeneratedValue(
             strategy = SEQUENCE,
@@ -50,7 +47,7 @@ public class Venue {
     @Column(name="description")
     private String description;
 
-    @OneToOne(mappedBy = "venue", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
     @Column(name="capacity")

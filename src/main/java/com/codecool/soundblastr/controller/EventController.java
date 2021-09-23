@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/event")
 public class EventController {
@@ -80,7 +81,7 @@ public class EventController {
         }
     }
 
-    @PutMapping("/{eventId}")
+    @PutMapping("/updateId={eventId}")
     public Object updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
         Band band;
         Venue venue;

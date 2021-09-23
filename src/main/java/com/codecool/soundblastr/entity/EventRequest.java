@@ -18,5 +18,4 @@ public class EventRequest {
     private String imageUrl;
     private Long bandId;
     private Long venueId;
-
 }

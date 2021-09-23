@@ -52,7 +52,10 @@ public class Event {
     private LocalDate date;
 
     @Column(name="ticketPrice")
-    private int ticketPrice;
+    private Integer ticketPrice;
+
+    @Column(name="description")
+    private String description;
 
     @ManyToOne
     private Band band;

@@ -16,6 +16,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @AllArgsConstructor
 @Builder
 public class Address {
+    @JsonIgnore
     @Id
     @SequenceGenerator(
         name = "address_sequence",
@@ -53,6 +54,7 @@ public class Address {
     private int zipcode;
 
     @JsonIgnore
-    @OneToOne()
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "address")
     private Venue venue;
 }

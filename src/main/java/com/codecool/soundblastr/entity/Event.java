@@ -51,6 +51,7 @@ public class Event {
     )
     private LocalDate date;
 
+    @Column(name="ticketPrice")
     private int ticketPrice;
 
     @ManyToOne

@@ -13,7 +13,8 @@ public class EventRequest {
 
     private String title;
     private LocalDate date;
-    private int price;
+    private int ticketPrice;
+    private String imageUrl;
     private Long bandId;
     private Long venueId;
 

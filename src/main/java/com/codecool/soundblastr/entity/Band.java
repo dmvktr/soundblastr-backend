@@ -25,7 +25,7 @@ public class Band {
             name = "band_sequence",
             sequenceName = "band_sequence",
             allocationSize = 1,
-            initialValue = 100
+            initialValue = 101
     )
     @GeneratedValue(
             strategy = SEQUENCE,

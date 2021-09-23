@@ -4,10 +4,10 @@ import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/venue")
@@ -18,26 +18,29 @@ public class VenueController {
     private final EventRepository eventRepository;
 
     @Autowired
-    public VenueController(VenueRepository venueRepository,
-                           EventRepository eventRepository) {
+    public VenueController(VenueRepository venueRepository, EventRepository eventRepository) {
         this.venueRepository = venueRepository;
         this.eventRepository = eventRepository;
     }
 
     @PostMapping("/new")
     @ResponseBody
-    public Venue addVenue(@RequestBody String name, Address address, int numberOfSeats) {
+    public Venue addVenue(@RequestBody VenueRequest venueRequest) {
         Venue venueToAdd = Venue.builder()
-                .name(name)
-                .address(address)
-                .numberOfSeats(numberOfSeats)
+                .imageUrl(venueRequest.getImageUrl())
+                .name(venueRequest.getName())
+                .description(venueRequest.getDescription())
+                .address(venueRequest.getAddress())
+                .capacity(venueRequest.getCapacity())
                 .build();
-        return venueRepository.save(venueToAdd);
+        Venue newVenue = venueRepository.save(venueToAdd);
+        newVenue.getAddress().setVenue(newVenue);
+        return newVenue;
     }
 
-    @GetMapping("/id={venueId}")
-    public Venue getVenue(@PathVariable("venueId") String venueId) {
-        return venueRepository.findById(Long.parseLong(venueId)).orElse(null);
+    @GetMapping("/{venueId}")
+    public Venue getVenue(@PathVariable Long venueId) {
+        return venueRepository.findById(venueId).orElse(null);
     }
 
     @GetMapping("/all")
@@ -45,25 +48,33 @@ public class VenueController {
         return venueRepository.findAll();
     }
 
-    @DeleteMapping("/id={venueId}")
-    public void deleteVenue(@PathVariable("venueId") String venueId) {
-        venueRepository.deleteById(Long.parseLong(venueId));
+    @DeleteMapping("/{venueId}")
+    public JsonMessage deleteVenue(@PathVariable Long venueId) {
+
+        if (eventRepository.findEventsByVenueId(venueId).size() != 0) {
+            return new JsonMessage(Status.NO_ACTION, "Venue #" + venueId + " has associated events and it cannot be deleted.");
+        }
+
+        try {
+            venueRepository.deleteById(venueId);
+            return new JsonMessage(Status.OK, "Successfully deleted venue #" + venueId + ".");
+        } catch (EmptyResultDataAccessException e) {
+            return new JsonMessage(Status.NO_ACTION, "Venue #" + venueId + " not found, nothing happened");
+        }
     }
 
-    // TODO - move this to EventController
-//    @GetMapping("/events/id={venueId}")
-//    public List<Event> getEventsForVenue(@PathVariable("venueId") String venueId) {
-//        return eventRepository.findEventsByVenueId(Long.parseLong(venueId));
-//    }
-
-    @PutMapping("/id={venueId}")
+    @PutMapping("/{venueId}")
     @ResponseBody
-    public Venue updateVenue(@PathVariable("venueId") String venueId, @RequestBody String name, Address address, int numberOfSeats) {
-        Venue venueToUpdate = venueRepository.getVenueById(Long.parseLong(venueId));
-        venueToUpdate.setName(name);
-        venueToUpdate.setAddress(address);
-        venueToUpdate.setNumberOfSeats(numberOfSeats);
-        return venueRepository.save(venueToUpdate);
+    public Venue updateVenue(@PathVariable Long venueId, @RequestBody VenueRequest venueRequest) {
+        Venue venueToUpdate = venueRepository.getById(venueId);
+        venueToUpdate.setImageUrl(venueRequest.getImageUrl());
+        venueToUpdate.setName(venueRequest.getName());
+        venueToUpdate.setAddress(venueRequest.getAddress());
+        venueToUpdate.setCapacity(venueRequest.getCapacity());
+        venueToUpdate.setDescription(venueRequest.getDescription());
+        Venue newVenue = venueRepository.save(venueToUpdate);
+        newVenue.getAddress().setVenue(newVenue);
+        return newVenue;
     }
 
 }

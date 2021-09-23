@@ -1,6 +1,7 @@
 package com.codecool.soundblastr.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
@@ -14,7 +15,6 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class Address {
     @Id
     @SequenceGenerator(
@@ -40,7 +40,7 @@ public class Address {
         name="houseNr",
         nullable = false
     )
-    private String houseNr;
+    private int houseNr;
     @Column(
         name="city",
         nullable = false
@@ -52,6 +52,7 @@ public class Address {
     )
     private int zipcode;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne()
     private Venue venue;
 }

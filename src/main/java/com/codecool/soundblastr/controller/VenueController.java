@@ -65,13 +65,19 @@ public class VenueController {
 
     @PutMapping("/{venueId}")
     @ResponseBody
-    public Venue updateVenue(@PathVariable Long venueId, @RequestBody VenueRequest venueRequest) {
-        Venue venueToUpdate = venueRepository.getById(venueId);
+    public Object updateVenue(@PathVariable Long venueId, @RequestBody VenueRequest venueRequest) {
+        Venue venueToUpdate = venueRepository.findById(venueId).orElse(null);
+
+        if (venueToUpdate == null) {
+            return new JsonMessage(Status.NO_ACTION, "Venue #" + venueId + " not found, nothing happened.");
+        }
+
         venueToUpdate.setImageUrl(venueRequest.getImageUrl());
         venueToUpdate.setName(venueRequest.getName());
         venueToUpdate.setAddress(venueRequest.getAddress());
         venueToUpdate.setCapacity(venueRequest.getCapacity());
         venueToUpdate.setDescription(venueRequest.getDescription());
+
         Venue newVenue = venueRepository.save(venueToUpdate);
         newVenue.getAddress().setVenue(newVenue);
         return newVenue;

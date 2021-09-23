@@ -37,6 +37,9 @@ public class Venue {
     )
     private Long id;
 
+    @Column(name="imageUrl")
+    private String imageUrl;
+
     @Column(
             name="name",
             unique = true,

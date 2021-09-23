@@ -47,10 +47,13 @@ public class Venue {
     )
     private String name;
 
-    @Column(name="number_of_seats")
-    private int numberOfSeats;
+    @Column(name="description")
+    private String description;
 
     @OneToOne(mappedBy = "venue", cascade = CascadeType.ALL)
     private Address address;
+
+    @Column(name="capacity")
+    private Integer capacity;
 
 }

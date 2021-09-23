@@ -7,5 +7,9 @@ public enum Genre {
     HIPHOP,
     RAP,
     ELECTRONIC,
-    INDIE
+    INDIE,
+    METALCORE,
+    PIANIST,
+    COMPOSER
+
 }

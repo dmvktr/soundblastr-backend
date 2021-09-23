@@ -41,7 +41,7 @@ public class SoundblastrBackendApplication {
                     .name("Muse")
                     .genre(Genre.INDIE)
                     .genre(Genre.POP)
-                    .imageUrl("https://cdn.freelogovectors.net/wp-content/uploads/2019/10/muse-logo.png")
+                    .imageUrl("https://i.pinimg.com/originals/fd/24/35/fd2435bd31a2b62206128f78c332d4b9.jpg")
                     .description("Muse are an English rock band from Teignmouth, Devon, formed in 1994.")
                     .build();
 

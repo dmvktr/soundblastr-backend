@@ -1,9 +1,10 @@
 package com.codecool.soundblastr.controller;
 
-import com.codecool.soundblastr.entity.Band;
-import com.codecool.soundblastr.entity.Genre;
+import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.BandRepository;
+import com.codecool.soundblastr.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,21 +17,29 @@ public class BandController {
 
     private final BandRepository bandRepository;
 
+    private final EventRepository eventRepository;
+
     @Autowired
-    public BandController(BandRepository bandRepository) {
+    public BandController(BandRepository bandRepository, EventRepository eventRepository) {
         this.bandRepository = bandRepository;
+        this.eventRepository = eventRepository;
     }
 
     @PostMapping("/new")
     @ResponseBody
-    public Band addBand(@RequestBody String name, List<Genre> genreList) {
-        Band bandToAdd = Band.builder().name(name).genres(genreList).build();
+    public Band addBand(@RequestBody BandRequest bandRequest) {
+        Band bandToAdd = Band.builder()
+                .imageUrl(bandRequest.getImageUrl())
+                .name(bandRequest.getName())
+                .description(bandRequest.getDescription())
+                .genres(bandRequest.getGenres())
+                .build();
         return bandRepository.save(bandToAdd);
     }
 
     @GetMapping("/{bandId}")
-    public Band getBand(@PathVariable("bandId") String bandId) {
-        return bandRepository.findById(Long.parseLong(bandId)).orElse(null);
+    public Band getBand(@PathVariable Long bandId) {
+        return bandRepository.findById(bandId).orElse(null);
     }
 
     @GetMapping("/all")
@@ -39,16 +48,33 @@ public class BandController {
     }
 
     @DeleteMapping("/{bandId}")
-    public void deleteBand(@PathVariable("bandId") String bandId) {
-        bandRepository.deleteById(Long.parseLong(bandId));
+    public JsonMessage deleteBand(@PathVariable Long bandId) {
+
+        if (eventRepository.findEventsByBandId(bandId).size() != 0) {
+            return new JsonMessage(Status.NO_ACTION, "Band #" + bandId + " has associated events and it cannot be deleted.");
+        }
+
+        try {
+            bandRepository.deleteById(bandId);
+            return new JsonMessage(Status.OK, "Successfully deleted band #" + bandId + ".");
+        } catch (EmptyResultDataAccessException e) {
+            return new JsonMessage(Status.NO_ACTION, "Band #" + bandId + " not found, nothing happened");
+        }
     }
 
     @PutMapping("/{bandId}")
     @ResponseBody
-    public Band updateBand(@PathVariable Long bandId, @RequestBody String name, Set<Genre> genres) {
-        Band bandToUpdate = bandRepository.getById(bandId);
-        bandToUpdate.setName(name);
-        bandToUpdate.setGenres(genres);
+    public Object updateBand(@PathVariable Long bandId, @RequestBody BandRequest bandRequest) {
+        Band bandToUpdate = bandRepository.findById(bandId).orElse(null);
+        if (bandToUpdate == null) {
+            return new JsonMessage(Status.NO_ACTION, "Band #" + bandId + " not found, nothing happened.");
+        }
+
+        bandToUpdate.setImageUrl(bandRequest.getImageUrl());
+        bandToUpdate.setName(bandRequest.getName());
+        bandToUpdate.setDescription(bandRequest.getDescription());
+        bandToUpdate.setGenres(bandRequest.getGenres());
+
         return bandRepository.save(bandToUpdate);
     }
 }

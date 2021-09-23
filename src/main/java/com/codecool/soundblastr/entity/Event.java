@@ -35,6 +35,9 @@ public class Event {
     )
     private Long id;
 
+    @Column(name="imageUrl")
+    private String imageUrl;
+
     @Column(
             name="title",
             unique = true,
@@ -48,13 +51,11 @@ public class Event {
     )
     private LocalDate date;
 
-    private int price;
+    private int ticketPrice;
 
     @ManyToOne
     private Band band;
 
     @ManyToOne
     private Venue venue;
-
-//    private TicketType ticketType; // TODO implement ticket type
 }

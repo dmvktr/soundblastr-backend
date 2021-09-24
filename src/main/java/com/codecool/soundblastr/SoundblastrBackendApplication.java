@@ -87,7 +87,7 @@ public class SoundblastrBackendApplication {
 
             Venue budapestPark = Venue.builder()
                     .name("Budapest Park")
-                    .imageUrl("https://9.kerulet.ittlakunk.hu/files/ittlakunk/styles/large/public/upload/company/1256/budapest_park_logo.png?itok=6iDPG-pX")
+                    .imageUrl("https://cseppek.hu/files/images/teljes_kepernyo_rogzitese_2015.04.26._133428.jpg")
                     .description("Budapest Park is Europe's Largest Outdoor Concert and Entertainment Venue")
                     .address(budapestParkAddress)
                     .capacity(1000)
@@ -150,7 +150,7 @@ public class SoundblastrBackendApplication {
                     .date(LocalDate.of(2021, 10, 1))
                     .band(museDB)
                     .imageUrl("https://seeklogo.com/images/M/muse-knights-of-cydonia-logo-9172377960-seeklogo.com.png")
-                    .description("Enjoy Muse at Budapest Park")
+                    .description("Enjoy Muse at Sziget Festival")
                     .ticketPrice(15000)
                     .venue(szigetDB).build();
 

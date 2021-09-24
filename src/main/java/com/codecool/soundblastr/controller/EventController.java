@@ -80,7 +80,7 @@ public class EventController {
         }
     }
 
-    @PutMapping("/updateId={eventId}")
+    @PutMapping("/{eventId}")
     public Object updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
         Band band;
         Venue venue;

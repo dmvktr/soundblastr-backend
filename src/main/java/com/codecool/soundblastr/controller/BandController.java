@@ -5,6 +5,7 @@ import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class BandController {
         try {
             bandRepository.deleteById(bandId);
             return ResponseEntity.ok("Successfully deleted band #" + bandId + ".");
-        } catch (DataAccessResourceFailureException e) {
+        } catch (DataAccessException e) {
             throw new DataAccessResourceFailureException("Band #" + bandId + " not found, nothing happened");
         }
     }

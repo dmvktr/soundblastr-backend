@@ -65,13 +65,13 @@ public class EventController {
     }
 
     @GetMapping("/band/{bandId}")
-    public List<Event> getEventsForBand(@PathVariable Long bandId) {
-        return eventRepository.findEventsByBandId(bandId);
+    public ResponseEntity<List<Event>> getEventsForBand(@PathVariable Long bandId) {
+        return ResponseEntity.ok(eventRepository.findEventsByBandId(bandId));
     }
 
     @GetMapping("/venue/{venueId}")
-    public List<Event> getEventsForVenue(@PathVariable Long venueId) {
-        return eventRepository.findEventsByVenueId(venueId);
+    public ResponseEntity<List<Event>> getEventsForVenue(@PathVariable Long venueId) {
+        return ResponseEntity.ok(eventRepository.findEventsByVenueId(venueId));
     }
 
     @DeleteMapping("/{eventId}")

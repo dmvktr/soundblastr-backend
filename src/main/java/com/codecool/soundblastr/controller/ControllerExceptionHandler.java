@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.persistence.EntityNotFoundException;
+
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(DataAccessResourceFailureException.class)
+    @ExceptionHandler({DataAccessResourceFailureException.class, EntityNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> resourceNotFound(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

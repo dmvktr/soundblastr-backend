@@ -5,12 +5,10 @@ import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @CrossOrigin
@@ -30,26 +28,21 @@ public class EventController {
     }
 
     @PostMapping("/new")
-    public Object addEvent(@RequestBody EventRequest eventRequest) {
-        Band band;
-        Venue venue;
-        try {
-            band = bandRepository.getById(eventRequest.getBandId());
-            venue = venueRepository.getById(eventRequest.getVenueId());
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException(
-                "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found");
-        }
+    public ResponseEntity<Event> addEvent(@RequestBody EventRequest eventRequest) {
+        Band band = bandRepository.findById(eventRequest.getBandId()).orElseThrow(
+            () -> new DataAccessResourceFailureException("Band #" + eventRequest.getBandId() + " not found!"));
+        Venue venue = venueRepository.findById(eventRequest.getVenueId()).orElseThrow(
+            () -> new DataAccessResourceFailureException("Venue #" + eventRequest.getVenueId() + " not found!"));
 
         Event newEvent = Event.builder()
-                .title(eventRequest.getTitle())
-                .imageUrl(eventRequest.getImageUrl())
-                .date(eventRequest.getDate())
-                .ticketPrice(eventRequest.getTicketPrice())
-                .description(eventRequest.getDescription())
-                .band(band)
-                .venue(venue)
-                .build();
+            .title(eventRequest.getTitle())
+            .imageUrl(eventRequest.getImageUrl())
+            .date(eventRequest.getDate())
+            .ticketPrice(eventRequest.getTicketPrice())
+            .description(eventRequest.getDescription())
+            .band(band)
+            .venue(venue)
+            .build();
         return ResponseEntity.ok(eventRepository.save(newEvent));
     }
 
@@ -75,32 +68,23 @@ public class EventController {
     }
 
     @DeleteMapping("/{eventId}")
-    public JsonMessage deleteEvent(@PathVariable Long eventId) {
+    public ResponseEntity<Object> deleteEvent(@PathVariable Long eventId) {
         try {
             eventRepository.deleteById(eventId);
-            return new JsonMessage(Status.OK, "Successfully deleted event #" + eventId + ".");
-        } catch (EmptyResultDataAccessException e) {
-            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened");
+            return ResponseEntity.ok("Successfully deleted event #" + eventId + ".");
+        } catch (DataAccessException e) {
+            throw new DataAccessResourceFailureException("Event #" + eventId + " not found!");
         }
     }
 
     @PutMapping("/{eventId}")
-    public Object updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
-        Band band;
-        Venue venue;
-        Event eventToUpdate;
-
-        eventToUpdate = eventRepository.findById(eventId).orElse(null);
-        if (eventToUpdate == null) {
-            return new JsonMessage(Status.NO_ACTION, "Event #" + eventId + " not found, nothing happened.");
-        }
-
-        try {
-            band = bandRepository.getById(eventRequest.getBandId());
-            venue = venueRepository.getById(eventRequest.getVenueId());
-        } catch (EntityNotFoundException e) {
-            return new JsonMessage(Status.NO_ACTION, "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found, nothing happened.");
-        }
+    public ResponseEntity<Object> updateEvent(@PathVariable Long eventId, @RequestBody EventRequest eventRequest) {
+        Event eventToUpdate = eventRepository.findById(eventId).orElseThrow(
+            () -> new DataAccessResourceFailureException("Event #" + eventId + " not found!"));
+        Band band = bandRepository.findById(eventRequest.getBandId()).orElseThrow(
+            () -> new DataAccessResourceFailureException("Band #" + eventRequest.getBandId() + " not found!"));
+        Venue venue = venueRepository.findById(eventRequest.getVenueId()).orElseThrow(
+            () -> new DataAccessResourceFailureException("Venue #" + eventRequest.getVenueId() + " not found!"));
 
         eventToUpdate.setTitle(eventRequest.getTitle());
         eventToUpdate.setImageUrl(eventRequest.getImageUrl());
@@ -109,7 +93,8 @@ public class EventController {
         eventToUpdate.setDescription(eventRequest.getDescription());
         eventToUpdate.setBand(band);
         eventToUpdate.setVenue(venue);
-        return eventRepository.save(eventToUpdate);
+
+        return ResponseEntity.ok(eventRepository.save(eventToUpdate));
     }
 
 }

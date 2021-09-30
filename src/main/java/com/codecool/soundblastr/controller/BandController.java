@@ -4,12 +4,12 @@ import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -41,7 +41,8 @@ public class BandController {
 
     @GetMapping("/{bandId}")
     public Band getBand(@PathVariable Long bandId) {
-        return bandRepository.findById(bandId).orElse(null);
+       return bandRepository.findById(bandId).orElseThrow(
+           ()-> new DataAccessResourceFailureException("Resource not found!"));
     }
 
     @GetMapping("/all")

@@ -55,12 +55,13 @@ public class EventController {
 
     @GetMapping("/{eventId}")
     public Event getEvent(@PathVariable Long eventId) {
-        return eventRepository.findById(eventId).orElse(null);
+        return eventRepository.findById(eventId).orElseThrow(() ->
+            new DataAccessResourceFailureException("The requested event was not found!"));
     }
 
     @GetMapping("/all")
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public ResponseEntity<List<Event>> getAllEvents() {
+        return ResponseEntity.ok(eventRepository.findAll());
     }
 
     @GetMapping("/band/{bandId}")

@@ -12,7 +12,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(DataAccessResourceFailureException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> resourceNotFound() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Object> resourceNotFound(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

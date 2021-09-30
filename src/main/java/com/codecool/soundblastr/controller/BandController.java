@@ -4,11 +4,8 @@ import com.codecool.soundblastr.controller.exception.IllegalOperationException;
 import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

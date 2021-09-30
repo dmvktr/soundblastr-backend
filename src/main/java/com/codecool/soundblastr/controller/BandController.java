@@ -46,8 +46,8 @@ public class BandController {
     }
 
     @GetMapping("/all")
-    public List<Band> getAllBands() {
-        return bandRepository.findAll();
+    public ResponseEntity<List<Band>> getAllBands() {
+        return ResponseEntity.ok(bandRepository.findAll());
     }
 
     @DeleteMapping("/{bandId}")

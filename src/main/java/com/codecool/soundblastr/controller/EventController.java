@@ -5,7 +5,9 @@ import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -16,9 +18,9 @@ import java.util.List;
 @RequestMapping("/event")
 public class EventController {
 
-    private EventRepository eventRepository;
-    private BandRepository bandRepository;
-    private VenueRepository venueRepository;
+    private final EventRepository eventRepository;
+    private final BandRepository bandRepository;
+    private final VenueRepository venueRepository;
 
     @Autowired
     public EventController(EventRepository eventRepository, BandRepository bandRepository, VenueRepository venueRepository) {
@@ -35,7 +37,8 @@ public class EventController {
             band = bandRepository.getById(eventRequest.getBandId());
             venue = venueRepository.getById(eventRequest.getVenueId());
         } catch (EntityNotFoundException e) {
-            return new JsonMessage(Status.NO_ACTION, "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found, nothing happened.");
+            throw new EntityNotFoundException(
+                "Band #" + eventRequest.getBandId() + " or Venue #" + eventRequest.getVenueId() + " not found");
         }
 
         Event newEvent = Event.builder()
@@ -47,7 +50,7 @@ public class EventController {
                 .band(band)
                 .venue(venue)
                 .build();
-        return eventRepository.save(newEvent);
+        return ResponseEntity.ok(eventRepository.save(newEvent));
     }
 
     @GetMapping("/{eventId}")

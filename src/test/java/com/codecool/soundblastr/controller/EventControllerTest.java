@@ -7,6 +7,7 @@ import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,6 +36,12 @@ class EventControllerTest {
 
     @MockBean
     EventRepository mockEventRepository;
+
+    @MockBean
+    BandRepository bandRepository;
+
+    @MockBean
+    VenueRepository venueRepository;
 
 
     @Test
@@ -59,16 +67,22 @@ class EventControllerTest {
 
     @Test
     void addEventRoute_shouldReturnJsonWithCreatedEvent_whenPostRequestIsSuccessful() throws Exception {
+        Venue venue = Venue.builder().id(1000L).name("Budapest Park").build();
+        Band band = Band.builder().id(100L).name("Muse").build();
         Event event = Event.builder().id(1L).title("rock concert").date(LocalDate.of(2021,12, 12))
-            .venue(Venue.builder().id(1000L).name("Budapest Park").build())
-            .band(Band.builder().id(100L).name("Muse").build())
+            .venue(venue)
+            .band(band)
             .build();
+
+        Mockito.when(bandRepository.findById(any())).thenReturn(Optional.ofNullable(band));
+        Mockito.when(venueRepository.findById(any())).thenReturn(Optional.ofNullable(venue));
         Mockito.when(mockEventRepository.save(any())).thenReturn(event);
+
         mockMvc.perform(MockMvcRequestBuilders.post("/event/new")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content("{\"title\": \"Killers new Concert from Postman 3\", \"date\": \"2031-01-01\", \"price\": 400, " +
-                "\"bandId\": 101, \"venueId\": 1000}"))
+                "\"bandId\": 100, \"venueId\": 1000}"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.title").value("rock concert"))
             .andExpect(jsonPath("$.band.id").value( 100))

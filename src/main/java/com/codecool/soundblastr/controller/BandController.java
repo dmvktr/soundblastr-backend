@@ -61,7 +61,7 @@ public class BandController {
             bandRepository.deleteById(bandId);
             return ResponseEntity.ok("Successfully deleted band #" + bandId + ".");
         } catch (DataAccessException e) {
-            throw new DataAccessResourceFailureException("Band #" + bandId + " not found, nothing happened");
+            throw new DataAccessResourceFailureException("Band #" + bandId + " not found!");
         }
     }
 

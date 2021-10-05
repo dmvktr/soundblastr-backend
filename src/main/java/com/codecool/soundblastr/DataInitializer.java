@@ -44,14 +44,14 @@ public class DataInitializer implements CommandLineRunner {
         log.debug("initializing sample data...");
 
         userRepository.save(
-            User.builder()
+            AppUser.builder()
             .username("administrator")
             .password(passwordEncoder.encode(System.getenv("employee")))
             .roles(List.of("ROLE_EMPLOYEE"))
             .build());
 
         userRepository.save(
-            User.builder()
+            AppUser.builder()
                 .username("manager")
                 .password(passwordEncoder.encode(System.getenv("manager")))
                 .roles(List.of("ROLE_MANAGER"))

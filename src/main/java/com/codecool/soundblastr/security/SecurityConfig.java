@@ -7,24 +7,34 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final JwtTokenServices jwtTokenServices;
+
+    public SecurityConfig(JwtTokenServices jwtTokenServices) {
+        this.jwtTokenServices = jwtTokenServices;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.cors()
             .and()
-            .authorizeRequests()
-            .antMatchers("/auth/login").permitAll()
-            .antMatchers(HttpMethod.GET, "/admin/**").authenticated()
-            .antMatchers(HttpMethod.POST, "/admin/**").authenticated()
-            .antMatchers(HttpMethod.PUT, "/admin/**").authenticated()
-            .antMatchers(HttpMethod.DELETE, "/admin/**").hasRole("MANAGER")
-            .anyRequest().denyAll();
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .authorizeRequests()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/band/**", "/venue/**", "/event/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/band/**", "/venue/**", "/event/**").authenticated()
+                .antMatchers(HttpMethod.PUT, "/band/**", "/venue/**", "/event/**").authenticated()
+//                .antMatchers(HttpMethod.DELETE, "venue/**", "/event/**").hasRole("MANAGER")
+                .anyRequest().denyAll()
+            .and()
+            .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

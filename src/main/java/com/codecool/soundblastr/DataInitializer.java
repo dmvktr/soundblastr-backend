@@ -3,14 +3,18 @@ package com.codecool.soundblastr;
 import com.codecool.soundblastr.entity.*;
 import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
+import com.codecool.soundblastr.repository.UserRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -22,15 +26,36 @@ public class DataInitializer implements CommandLineRunner {
 
     private final EventRepository eventRepository;
 
-    public DataInitializer(BandRepository bandRepository, VenueRepository venueRepository, EventRepository eventRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
+    public DataInitializer(BandRepository bandRepository, VenueRepository venueRepository,
+                           EventRepository eventRepository, UserRepository userRepository) {
         this.bandRepository = bandRepository;
         this.venueRepository = venueRepository;
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
     public void run(String... args) {
         log.debug("initializing sample data...");
+
+        userRepository.save(
+            User.builder()
+            .username("administrator")
+            .password(passwordEncoder.encode(System.getenv("employee")))
+            .roles(List.of("ROLE_EMPLOYEE"))
+            .build());
+
+        userRepository.save(
+            User.builder()
+                .username("manager")
+                .password(passwordEncoder.encode(System.getenv("manager")))
+                .roles(List.of("ROLE_MANAGER"))
+                .build());
 
         Band muse = Band.builder()
             .name("Muse")

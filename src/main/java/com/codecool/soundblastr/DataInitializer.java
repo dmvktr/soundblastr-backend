@@ -46,14 +46,14 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.save(
             AppUser.builder()
             .username("administrator")
-            .password(passwordEncoder.encode(System.getenv("employee")))
+            .password(passwordEncoder.encode("2"))
             .roles(List.of("ROLE_EMPLOYEE"))
             .build());
 
         userRepository.save(
             AppUser.builder()
                 .username("manager")
-                .password(passwordEncoder.encode(System.getenv("manager")))
+                .password(passwordEncoder.encode("1"))
                 .roles(List.of("ROLE_MANAGER"))
                 .build());
 

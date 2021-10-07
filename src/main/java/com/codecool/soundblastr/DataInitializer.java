@@ -143,7 +143,7 @@ public class DataInitializer implements CommandLineRunner {
 
         Venue barbaNegra = Venue.builder()
             .name("Barba Negra")
-            .imageUrl("https://yt3.ggpht.com/ytc/AKedOLQbQsrxFu6qklPtI9M3AaiibTubysXj3qgiFWDS=s900-c-k-c0x00ffffff-no-rj")
+            .imageUrl("https://www.budapest.com/w/assignables/midi/barba_negra_track-156120850797.jpg")
             .description("Barba Negra Music Club - An indoor concert hall with a unique atmosphere.")
             .address(barbaAddress)
             .capacity(700)

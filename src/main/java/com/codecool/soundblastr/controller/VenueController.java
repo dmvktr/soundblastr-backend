@@ -57,14 +57,14 @@ public class VenueController {
     public ResponseEntity<Object> deleteVenue(@PathVariable Long venueId) {
 
         if (eventRepository.findEventsByVenueId(venueId).size() != 0) {
-            throw new IllegalOperationException("Venue #" + venueId + " has associated events and it cannot be deleted.");
+            throw new IllegalOperationException("Venue has associated events and it cannot be deleted.");
         }
 
         try {
             venueRepository.deleteById(venueId);
-            return ResponseEntity.ok("Successfully deleted venue #" + venueId + ".");
+            return ResponseEntity.ok("Successfully deleted venue.");
         } catch (DataAccessException e) {
-            throw new DataAccessResourceFailureException("Venue #" + venueId + " not found!");
+            throw new DataAccessResourceFailureException("Venue not found!");
         }
     }
 

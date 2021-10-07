@@ -71,9 +71,9 @@ public class EventController {
     public ResponseEntity<Object> deleteEvent(@PathVariable Long eventId) {
         try {
             eventRepository.deleteById(eventId);
-            return ResponseEntity.ok("Successfully deleted event #" + eventId + ".");
+            return ResponseEntity.ok("Event successfully deleted.");
         } catch (DataAccessException e) {
-            throw new DataAccessResourceFailureException("Event #" + eventId + " not found!");
+            throw new DataAccessResourceFailureException("Event not found!");
         }
     }
 

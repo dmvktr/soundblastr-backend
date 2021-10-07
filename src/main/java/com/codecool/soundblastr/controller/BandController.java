@@ -10,7 +10,10 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 @RestController
@@ -40,14 +43,37 @@ public class BandController {
     }
 
     @GetMapping("/{bandId}")
-    public Band getBand(@PathVariable Long bandId) {
-        return bandRepository.findById(bandId).orElseThrow(
+    public ResponseEntity<BandResponse> getBand(@PathVariable Long bandId) {
+         Band band = bandRepository.findById(bandId).orElseThrow(
             () -> new DataAccessResourceFailureException("Band not found!"));
+        Map<String, Set<Genre>> selection = Map.of("selected", band.getGenres(), "all", Set.of(Genre.values()));
+        BandResponse bandResponseObj = BandResponse.builder()
+            .id(band.getId())
+            .name(band.getName())
+            .imageUrl(band.getImageUrl())
+            .description(band.getDescription())
+            .genreSelection(selection)
+            .build();
+        return ResponseEntity.ok(bandResponseObj);
+    }
+
+    @GetMapping("/getGenres")
+    public ResponseEntity<Genre[]> getBand() {
+        return ResponseEntity.ok(Genre.values());
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Band>> getAllBands() {
-        return ResponseEntity.ok(bandRepository.findAll());
+        List<Band> bands = bandRepository.findAll();
+//        List<BandResponse> bandList = new ArrayList<>();
+//        bands.forEach(band -> bandList.add(BandResponse.builder()
+//            .id(band.getId())
+//            .imageUrl(band.getImageUrl())
+//            .description(band.getDescription())
+//            .genreSelection(Map.of("selected", band.getGenres(), "all", Set.of(Genre.values())))
+//            .build()));
+
+        return ResponseEntity.ok(bands);
     }
 
     @DeleteMapping("/{bandId}")

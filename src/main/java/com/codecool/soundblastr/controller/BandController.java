@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,14 +71,14 @@ public class BandController {
     public ResponseEntity<Object> deleteBand(@PathVariable Long bandId) {
 
         if (eventRepository.findEventsByBandId(bandId).size() != 0) {
-            throw new IllegalOperationException("Band #" + bandId + " has associated events and it cannot be deleted.");
+            throw new IllegalOperationException("Band has associated events and it cannot be deleted.");
         }
 
         try {
             bandRepository.deleteById(bandId);
-            return ResponseEntity.ok("Successfully deleted band #" + bandId + ".");
+            return ResponseEntity.ok("Successfully deleted band");
         } catch (DataAccessException e) {
-            throw new DataAccessResourceFailureException("Band #" + bandId + " not found!");
+            throw new DataAccessResourceFailureException("Band not found!");
         }
     }
 

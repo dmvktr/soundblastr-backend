@@ -6,23 +6,27 @@ import com.codecool.soundblastr.entity.Venue;
 import com.codecool.soundblastr.repository.BandRepository;
 import com.codecool.soundblastr.repository.EventRepository;
 import com.codecool.soundblastr.repository.VenueRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -30,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class EventControllerTest {
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     MockMvc mockMvc;
@@ -43,7 +50,15 @@ class EventControllerTest {
     @MockBean
     VenueRepository venueRepository;
 
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+            .webAppContextSetup(context)
+            .apply(springSecurity())
+            .build();
+    }
 
+    @WithMockUser("spring")
     @Test
     void getAllEventsRoute_shouldReturnJsonWithListOfEvents_whenMultipleEventsArePresent() throws Exception {
         Event event = Event.builder().venue(
@@ -56,7 +71,7 @@ class EventControllerTest {
         Mockito.when(mockEventRepository.findAll()).thenReturn(List.of(event, event2, event3));
 
         mockMvc.perform(MockMvcRequestBuilders
-            .get("/event/all"))
+            .get("/event/all").contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].title").value("rock concert"))
@@ -65,6 +80,7 @@ class EventControllerTest {
             .andExpect(jsonPath("$[2].title").value("electronic concert"));
     }
 
+    @WithMockUser("spring")
     @Test
     void addEventRoute_shouldReturnJsonWithCreatedEvent_whenPostRequestIsSuccessful() throws Exception {
         Venue venue = Venue.builder().id(1000L).name("Budapest Park").build();

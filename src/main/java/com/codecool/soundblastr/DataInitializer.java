@@ -8,6 +8,7 @@ import com.codecool.soundblastr.repository.VenueRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Component
 @Slf4j
+@Profile("prod")
 public class DataInitializer implements CommandLineRunner {
 
     private final BandRepository bandRepository;
@@ -38,6 +40,7 @@ public class DataInitializer implements CommandLineRunner {
         this.userRepository = userRepository;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
 
     @Override
     public void run(String... args) {
@@ -151,11 +154,13 @@ public class DataInitializer implements CommandLineRunner {
         bandRepository.save(aws);
         bandRepository.save(punnany);
         bandRepository.save(brains);
-        bandRepository.save(eltonJohn);
+        bandRepository.saveAndFlush(eltonJohn);
 
         venueRepository.save(budapestPark);
         venueRepository.save(sziget);
         venueRepository.save(barbaNegra);
+
+        List<Band> bands = bandRepository.findAll();
 
         Band museDB = bandRepository.findById(101L).get();
         Band killersDB = bandRepository.findById(102L).get();

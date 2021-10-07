@@ -85,7 +85,7 @@ public class DataInitializer implements CommandLineRunner {
         Band punnany = Band.builder()
             .name("Punnany Massif")
             .genre(Genre.HIPHOP)
-            .imageUrl("https://cdn.nwmgroups.hu/s/img/i/1207/20120702-punnany-massif-punnany-mate-hiphop-zenekar4.jpg")
+            .imageUrl("https://akvariumklub.hu/wp-content/uploads/2019/10/1536-1024-82.jpg")
             .description("Punnany Massif was founded in 2003 as a Hungarian hiphop band. Their genre is self-defined as social-funk.")
             .build();
 
@@ -194,7 +194,7 @@ public class DataInitializer implements CommandLineRunner {
             .title("Punnany Massif Concert")
             .date(LocalDate.of(2021, 10, 21))
             .band(punnanyDB)
-            .imageUrl("https://assets.vimity.com/vi-eyJ0IjpbeyJyZXNpemUi/OnsibCI6IjcwMCIsImgi/OiI0NjcifX1dLCJpZCI6/ImkyNTQxNjIiLCJmIjoi/anBnIn0;.jpg")
+            .imageUrl("https://akvariumklub.hu/wp-content/uploads/2019/10/1536-1024-82.jpg")
             .description("This is it! Punnany Massif at Budapest Park")
             .ticketPrice(7000)
             .venue(budapestParkDB).build();
@@ -222,7 +222,7 @@ public class DataInitializer implements CommandLineRunner {
             .title("Barba Negra meets Brains")
             .date(LocalDate.of(2021, 11, 1))
             .band(brainsDB)
-            .imageUrl("https://rockabillyrules.com/assets/flyers/orig/the-brains-hamburg.jpg")
+            .imageUrl("https://www.goldrecord.hu/core/mod/goldrecord/oldal/zenekarok/2020/06/09/1026/brains-2.jpg.webp?ver=3.0.1")
             .description("Brains and Barba negra are your ultimate November 1st programme")
             .ticketPrice(8900)
             .venue(barbaNegraDB).build();

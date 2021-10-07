@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/band/**", "/venue/**", "/event/**").authenticated()
             .antMatchers(HttpMethod.POST, "/band/**", "/venue/**", "/event/**").authenticated()
             .antMatchers(HttpMethod.PUT, "/band/**", "/venue/**", "/event/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "venue/**", "/event/**").hasRole("MANAGER")
+                .antMatchers(HttpMethod.DELETE, "/venue/**", "/event/**").hasRole("MANAGER")
                 .anyRequest().denyAll()
             .and()
             .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);

@@ -10,6 +10,8 @@ import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.GenerationType.SEQUENCE;
+
 @Entity
 @Table
 @Data
@@ -17,9 +19,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AppUser {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    @SequenceGenerator(
+        name = "user_sequence",
+        sequenceName = "user_sequence",
+        allocationSize = 1
+    )
+    @GeneratedValue(
+        strategy = SEQUENCE,
+        generator = "user_sequence"
+    )
+    private Long id;
 
     @NotEmpty
     private String username;

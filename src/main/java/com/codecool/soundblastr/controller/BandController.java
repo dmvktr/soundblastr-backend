@@ -65,14 +65,6 @@ public class BandController {
     @GetMapping("/all")
     public ResponseEntity<List<Band>> getAllBands() {
         List<Band> bands = bandRepository.findAll();
-//        List<BandResponse> bandList = new ArrayList<>();
-//        bands.forEach(band -> bandList.add(BandResponse.builder()
-//            .id(band.getId())
-//            .imageUrl(band.getImageUrl())
-//            .description(band.getDescription())
-//            .genreSelection(Map.of("selected", band.getGenres(), "all", Set.of(Genre.values())))
-//            .build()));
-
         return ResponseEntity.ok(bands);
     }
 
